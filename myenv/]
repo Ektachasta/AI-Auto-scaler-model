@@ -1,0 +1,93 @@
+import dash
+import dash_core_components as dcc
+import dash_html_components as html
+import pandas as pd
+import plotly.graph_objs as go
+
+# Initialize Dash app
+app = dash.Dash(__name__)
+
+# Load the data from a CSV file
+df = pd.read_csv('data.csv')  # Make sure to specify the correct path to your CSV
+
+# Layout of the app
+app.layout = html.Div([
+    html.H1("System Metrics Dashboard"),
+
+    # Displaying the data as a table
+    html.Table([
+        html.Tr([html.Th(col) for col in df.columns])  # Table headers
+    ] + [
+        html.Tr([html.Td(df.iloc[i][col]) for col in df.columns]) for i in range(len(df))
+    ]),
+
+    # Plot: CPU Usage over time
+    dcc.Graph(
+        id='cpu-usage-graph',
+        figure={
+            'data': [
+                go.Scatter(
+                    x=df['Time-Date'],
+                    y=df['CPU Usage(%)'],
+                    mode='lines+markers',
+                    name='CPU Usage (%)'
+                )
+            ],
+            'layout': go.Layout(
+                title="CPU Usage (%) Over Time",
+                xaxis={'title': 'Time'},
+                yaxis={'title': 'CPU Usage (%)'}
+            )
+        }
+    ),
+
+    # Plot: Memory Usage over time
+    dcc.Graph(
+        id='memory-usage-graph',
+        figure={
+            'data': [
+                go.Scatter(
+                    x=df['Time-Date'],
+                    y=df['Memory Usage(%)'],
+                    mode='lines+markers',
+                    name='Memory Usage (%)'
+                )
+            ],
+            'layout': go.Layout(
+                title="Memory Usage (%) Over Time",
+                xaxis={'title': 'Time'},
+                yaxis={'title': 'Memory Usage (%)'}
+            )
+        }
+    ),
+
+    # Plot: User Count over time
+    dcc.Graph(
+        id='user-count-graph',
+        figure={
+            'data': [
+                go.Bar(
+                    x=df['Time-Date'],
+                    y=df['User Count'],
+                    name='User Count'
+                )
+            ],
+            'layout': go.Layout(
+                title="User Count Over Time",
+                xaxis={'title': 'Time'},
+                yaxis={'title': 'User Count'}
+            )
+        }
+    ),
+
+    # Scale Needed plot
+    html.Div([
+        html.H3("Scale Needed Alert"),
+        html.Div([html.P(f"{row['Time-Date']} - Scale Needed: {row['Scale Needed']}") for _, row in df.iterrows()])
+    ])
+])
+
+# Run the app
+if __name__ == '__main__':
+    app.run_server(debug=True)
+
