@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dash-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchlabels:
+      app: dash-app
+  template:
+    metadata:
+      labels:
+        app: dash-app
+    spec:
+      containers:
+        - name: dash-app
+          image: ekta431/dash-app:tag
+          ports:
+            - containerPort: 8050
+---
+apiversion: v1
+kind: Service
+metadeta:
+  name: dash-app-service
+spec:
+  selector:
+    app: dash-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8050
+  type: LoadBalancer

@@ -1,0 +1,8 @@
+nohup: ignoring input
+['Time-Date', 'CPU Usage (%)', 'Memory Usage (%)', 'User Count', 'scale needed']
+Dash is running on http://0.0.0.0:8050/
+
+ * Serving Flask app 'app.py'
+ * Debug mode: on
+['Time-Date', 'CPU Usage (%)', 'Memory Usage (%)', 'User Count', 'scale needed']
+d stop that program, or start the server with a different port.
