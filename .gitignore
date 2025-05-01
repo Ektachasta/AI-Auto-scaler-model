@@ -16,3 +16,4 @@
 # Backup and logs
 *.log
 *.bak
+*.ssh/
